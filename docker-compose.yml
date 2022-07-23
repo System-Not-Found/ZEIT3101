@@ -1,26 +1,26 @@
 version: "3.1"
 
 services:
-  web:
-    build: web/
-    ports:
-      - "3000:3000"
-    restart: on-failure:10
-    networks:
-      - web
-    depends_on:
-      - api
+  # web:
+  #   build: web/
+  #   ports:
+  #     - "3000:3000"
+  #   restart: on-failure:10
+  #   networks:
+  #     - web
+  #   depends_on:
+  #     - api
 
-  api:
-    build: api/
-    ports:
-      - "8443:8443"
-    restart: on-failure:10
-    networks:
-      - web
-      - database
-    depends_on:
-      - db
+  # api:
+  #   build: api/
+  #   ports:
+  #     - "8443:8443"
+  #   restart: on-failure:10
+  #   networks:
+  #     - web
+  #     - database
+  #   depends_on:
+  #     - db
 
   db:
     image: mongo
@@ -28,9 +28,24 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: $DATABASE_USER
       MONGO_INITDB_ROOT_PASSWORD: $DATABASE_PASSWORD
-    restart: always
+      MONGO_INITDB_DATABASE: stix
     networks:
       - database
+    ports:
+      - 27017:27017
+    volumes:
+      - db_data:$DATABASE_LOCATION
+
+  queue:
+    image: rabbitmq:3
+    environment:
+      RABBITMQ_DEFAULT_USER: $RABBITMQ_USER
+      RABBITMQ_DEFAULT_PASS: $RABBITMQ_PASSWORD
+    ports:
+      # AMQP protocol port
+      - 5672:5672
+      # HTTP management UI
+      - 15672:15672
 
 volumes:
   db_data:
