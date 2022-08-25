@@ -1,31 +1,12 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
+import { useIpv4Addresses } from "../lib/hooks/useIpv4Addresses";
+import { useNetworkObservables } from "../lib/hooks/useNetworkObservables";
 import { Ipv4Address, NetworkTraffic } from "../lib/types";
 
 const Home: NextPage = () => {
-  const [networkObservables, setNetworkObservables] = useState<
-    NetworkTraffic[]
-  >([]);
-  const [ipAddresses, setIpAddresses] = useState<Ipv4Address[]>();
-
-  useEffect(() => {
-    const getNetworkObservables = async () => {
-      const response = await fetch("/api/network-traffic");
-      if (response.ok) {
-        const observables = await response.json();
-
-        setNetworkObservables(observables);
-      }
-
-      const ipResponse = await fetch("/api/ipv4-addr");
-      if (ipResponse.ok) {
-        const ipAddresses = await ipResponse.json();
-
-        setIpAddresses(ipAddresses);
-      }
-    };
-    getNetworkObservables();
-  }, []);
+  const { data: networkObservables } = useNetworkObservables();
+  const { data: ipAddresses } = useIpv4Addresses();
 
   return (
     <div>
