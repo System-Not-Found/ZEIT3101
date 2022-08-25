@@ -1,2 +1,3 @@
 stix2==3.0.1
-python-dotenv==0.20.0
+nvdlib==0.5.8
+zeit3101helpers==0.0.6
