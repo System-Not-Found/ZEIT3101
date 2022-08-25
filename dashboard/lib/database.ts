@@ -12,8 +12,6 @@ const getClient = async (): Promise<mongoDB.Db> => {
     await client.connect();
 
     connection = client.db("stix");
-
-    console.log(await connection.collection("ipv4-addr").stats());
   }
   return connection;
 };
