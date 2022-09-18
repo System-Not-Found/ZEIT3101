@@ -68,11 +68,11 @@ def discover_hosts():
 
 
 # Used for local debugging
-current_active_hosts = ['192.168.1.1', '192.168.1.134', '192.168.1.170', '192.168.1.172', '192.168.1.179', '192.168.1.210', '192.168.1.211']
+# current_active_hosts = ['192.168.1.1', '192.168.1.134', '192.168.1.170', '192.168.1.172', '192.168.1.179', '192.168.1.210', '192.168.1.211']
 # current_active_hosts = ['192.168.1.134', '192.168.1.167' ]
 
 # UNCOMMENT THIS TO TEST
-# current_active_hosts = active_hosts
+current_active_hosts = active_hosts
 
 
 # OS detection, useful for network awareness
@@ -349,7 +349,7 @@ def cpe_scanning():
             continue
 
 # Running the functions
-# discover_hosts()
+discover_hosts()
 os_detection()
 host_port_scanning()
 cpe_scanning()
