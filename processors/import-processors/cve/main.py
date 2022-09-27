@@ -5,6 +5,7 @@ from zeit3101helpers import Helper
 
 
 class CVEProcessor:
+    @staticmethod
     def start():
         print("Pushing data...")
         CVEProcessor.send_stix_bundles()

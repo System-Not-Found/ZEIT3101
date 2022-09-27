@@ -39,11 +39,17 @@ class ChannelProvider:
         return self._enrichment_channel
 
     def get_stix_channel(self):
+
         new_channel = self._connection.channel()
 
-        new_channel.queue_declare(queue="stix-queue")
+        new_channel.exchange_declare(exchange="stix", exchange_type="fanout")
 
-        return new_channel
+        result = new_channel.queue_declare(queue="", exclusive=True)
+        queue_name = result.method.queue
+
+        new_channel.queue_bind(exchange="stix", queue=queue_name)
+
+        return new_channel, queue_name
 
 
 class Helper:
@@ -72,9 +78,9 @@ class Helper:
         channel.start_consuming()
 
     def send_stix_bundle(self, bundle: Bundle) -> None:
-        channel = self.channel_provider.get_stix_channel()
+        channel, queue_name = self.channel_provider.get_stix_channel()
         channel.basic_publish(
-            exchange="", routing_key="stix-queue", body=bundle.serialize()
+            exchange="stix", routing_key=queue_name, body=bundle.serialize()
         )
         channel.close()
 
@@ -84,9 +90,9 @@ class Helper:
             bundle = parse(json_bundle)
             return callback(bundle)
 
-        channel = self.channel_provider.get_stix_channel()
+        channel, queue_name = self.channel_provider.get_stix_channel()
         channel.basic_consume(
-            queue="stix-queue",
+            queue=queue_name,
             on_message_callback=consume_message,
             auto_ack=True,
         )

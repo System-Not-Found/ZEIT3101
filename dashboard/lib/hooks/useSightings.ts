@@ -1,13 +1,10 @@
 import useSWR from "swr";
-import { NetworkTraffic } from "../types";
+import { Sighting } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export const useNetworkObservables = () => {
-  const { data, error } = useSWR<NetworkTraffic[]>(
-    "/api/network-traffic",
-    fetcher
-  );
+export const useSightings = () => {
+  const { data, error } = useSWR<Sighting[]>("/api/sighting", fetcher);
 
   // render data
   const isLoading = !data && !error;

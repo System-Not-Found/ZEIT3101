@@ -1,13 +1,10 @@
 import useSWR from "swr";
-import { NetworkTraffic } from "../types";
+import { Location } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export const useNetworkObservables = () => {
-  const { data, error } = useSWR<NetworkTraffic[]>(
-    "/api/network-traffic",
-    fetcher
-  );
+export const useLocations = () => {
+  const { data, error } = useSWR<Location[]>("/api/location", fetcher);
 
   // render data
   const isLoading = !data && !error;

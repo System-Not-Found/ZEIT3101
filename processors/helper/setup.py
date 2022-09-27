@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name="zeit3101helpers",  # How you named your package folder (MyLib)
     packages=["zeit3101helpers"],  # Chose the same as "name"
-    version="0.0.7",  # Start with a small number and increase it with every change you make
+    version="0.0.11",  # Start with a small number and increase it with every change you make
     license="MIT",  # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     description="ZEIT3101 Helper functions",  # Give a short description about your library
     author="Ryan Cartwright",  # Type in your name
