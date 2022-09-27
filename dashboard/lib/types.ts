@@ -1,9 +1,9 @@
-import internal from "stream";
-
 export interface StixObject {
   type: string;
   spec_version: string;
   id: string;
+  created: string;
+  modified: string;
 }
 
 export interface Ipv4Address extends StixObject {
@@ -19,4 +19,35 @@ export interface NetworkTraffic {
   src_port: number;
   dst_port: number;
   protocols: string[];
+}
+
+export interface Infrastructure extends StixObject {
+  name: string;
+  description: string;
+  infrastructure_types: string[];
+  aliases: string[];
+  kill_chain_phases: string[];
+  first_seen: string;
+  last_seen: string;
+}
+
+export interface Relationship extends StixObject {
+  relationship_type: string;
+  source_ref: string;
+  target_ref: string;
+}
+
+export interface Sighting extends StixObject {
+  description?: string;
+  first_seen: string;
+  last_seen?: string;
+  count?: number;
+  sighting_of_ref: string;
+  observed_data_refs?: string[];
+  where_sighted_refs?: string[];
+  summary?: boolean;
+}
+
+export interface Location extends StixObject {
+  country: string;
 }

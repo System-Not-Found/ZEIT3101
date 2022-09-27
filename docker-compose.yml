@@ -39,12 +39,12 @@ services:
     depends_on:
       - db
 
-  pyshark:
-    build: processors/import-processors/pyshark
-    networks:
-      - processors
-    depends_on:
-      - queue
+  # pyshark:
+  #   build: processors/import-processors/pyshark
+  #   networks:
+  #     - processors
+  #   depends_on:
+  #     - queue
 
   # cve:
   #   build: processors/import-processors/cve
@@ -63,6 +63,18 @@ services:
     environment:
       DATABASE_USER: $DATABASE_USER
       DATABASE_PASSWORD: $DATABASE_PASSWORD
+    depends_on:
+      - queue
+
+  ip-lookup:
+    build: processors/analytics-engine/ip-lookup
+    networks:
+      - processors
+      - database
+    environment:
+      DATABASE_USER: $DATABASE_USER
+      DATABASE_PASSWORD: $DATABASE_PASSWORD
+      VIRUSTOTAL_API_KEY: $VIRUSTOTAL_API_KEY
     depends_on:
       - queue
 

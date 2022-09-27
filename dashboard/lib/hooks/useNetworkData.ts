@@ -1,11 +1,10 @@
 import useSWR from "swr";
-import { NetworkTraffic } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export const useNetworkObservables = () => {
-  const { data, error } = useSWR<NetworkTraffic[]>(
-    "/api/network-traffic",
+export const useNetworkData = () => {
+  const { data, error } = useSWR(
+    "/api/infrastructure-traffic/network",
     fetcher
   );
 

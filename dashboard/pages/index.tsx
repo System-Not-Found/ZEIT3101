@@ -1,31 +1,38 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
-import { useIpv4Addresses } from "../lib/hooks/useIpv4Addresses";
-import { useNetworkObservables } from "../lib/hooks/useNetworkObservables";
-import { Ipv4Address, NetworkTraffic } from "../lib/types";
+import GeoMap from "../components/data/GeoMap";
+import InfrastructureList from "../components/data/InfrastructureList";
+import SecurityStatus from "../components/data/SecurityStatus";
+import SightingCalendar from "../components/data/SightingCalendar";
+import TimeGraph from "../components/data/TimeGraph";
+import Navbar from "../components/shared/Navbar";
+import Panel from "../components/shared/Panel";
 
 const Home: NextPage = () => {
-  const { data: networkObservables } = useNetworkObservables();
-  const { data: ipAddresses } = useIpv4Addresses();
-
   return (
-    <div>
-      {ipAddresses ? (
-        Object.entries(
-          ipAddresses.reduce((acc, curr) => {
-            return (
-              acc[curr.value] ? ++acc[curr.value] : (acc[curr.value] = 1), acc
-            );
-          }, {} as Record<string, number>)
-        ).map(([k, v]) => (
-          <p>
-            {k} occurred {v} times
-          </p>
-        ))
-      ) : (
-        <></>
-      )}
-    </div>
+    <>
+      <div>
+        <Navbar />
+        <div className="flex h-screen gap-10 flex-wrap p-12">
+          <Panel compact={true} light={false}>
+            <SecurityStatus />
+          </Panel>
+
+          <Panel>
+            <TimeGraph />
+          </Panel>
+          <Panel compact={true}>
+            <SightingCalendar />
+          </Panel>
+          <Panel>
+            <GeoMap />
+          </Panel>
+          <Panel>
+            <InfrastructureList />
+          </Panel>
+        </div>
+      </div>
+      <div className="absolute bottom-0 h-5"></div>
+    </>
   );
 };
 

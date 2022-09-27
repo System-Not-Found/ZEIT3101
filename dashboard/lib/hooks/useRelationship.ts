@@ -1,11 +1,11 @@
 import useSWR from "swr";
-import { NetworkTraffic } from "../types";
+import { StixObject } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export const useNetworkObservables = () => {
-  const { data, error } = useSWR<NetworkTraffic[]>(
-    "/api/network-traffic",
+export const useRelatipnship = (object: StixObject) => {
+  const { data, error } = useSWR<StixObject[]>(
+    `/api/relationship/${object.id}`,
     fetcher
   );
 

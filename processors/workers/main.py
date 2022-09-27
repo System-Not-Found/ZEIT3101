@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from dataclasses import replace
 import json
 import os
 
@@ -25,13 +26,39 @@ class Worker:
 
     def process_message(self, bundle: Bundle):
         print(bundle)
-        if self.validate(bundle):
+        if Worker.validate(bundle):
+            new_bundle = []
+            ips = []
             for obj in bundle.objects:
                 document = json.loads(obj.serialize())
-                col = self.db[document["type"]]
-                col.insert_one(document)
+                if document["type"] == "ipv4-addr":
+                    ips.append(document)
 
-    def validate(self, bundle: Bundle) -> bool:
+            replace_ips = {}
+            for ip in ips:
+                db_ip = self.db["ipv4-addr"].find_one({"value": ip["value"]})
+                if db_ip is not None:
+                    replace_ips[ip["id"]] = db_ip["id"]
+                else:
+                    new_bundle.append(ip)
+
+            for obj in bundle.objects:
+                document = json.loads(obj.serialize())
+                for key in document:
+                    try:
+                        if document[key] in replace_ips.keys():
+                            document[key] = replace_ips[document[key]]
+                    except KeyError:
+                        continue
+                if document["type"] != "ipv4-addr":
+                    new_bundle.append(document)
+
+            print(new_bundle)
+            for obj in new_bundle:
+                self.db[obj["type"]].insert_one(obj)
+
+    @staticmethod
+    def validate(bundle: Bundle) -> bool:
         result = validate_string(bundle.serialize())
         return result.is_valid
 
