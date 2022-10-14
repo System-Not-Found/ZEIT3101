@@ -1,14 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import getClient from "../../../lib/database";
+import Database from "../../../lib/database";
+import { DataMode } from "../../../lib/types";
 
 export const getNetworkObservables = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { type } = req.query;
+  const { type, mode } = req.query;
   if (req.method === "GET") {
     try {
-      const db = await getClient();
+      const db = await Database.getClient(mode as DataMode);
 
       const observables = await db
         .collection(type as string)

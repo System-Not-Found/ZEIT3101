@@ -40,14 +40,14 @@ services:
       - db
 
   # pyshark:
-  #   build: processors/import-processors/pyshark
+  #   build: processors/src/import-processors/pyshark
   #   networks:
   #     - processors
   #   depends_on:
   #     - queue
 
   # cve:
-  #   build: processors/import-processors/cve
+  #   build: processors/src/import-processors/cve
   #   networks:
   #     - processors
   #   environment:
@@ -56,7 +56,7 @@ services:
   #     - queue
 
   worker:
-    build: processors/workers
+    build: processors/src/workers/default
     networks:
       - processors
       - database
@@ -66,8 +66,18 @@ services:
     depends_on:
       - queue
 
+  manual:
+    build: processors/src/workers/manual
+    networks:
+      - database
+    environment:
+      DATABASE_USER: $DATABASE_USER
+      DATABASE_PASSWORD: $DATABASE_PASSWORD
+    depends_on:
+      - queue
+
   ip-lookup:
-    build: processors/analytics-engine/ip-lookup
+    build: processors/src/analytics-engine/ip-lookup
     networks:
       - processors
       - database

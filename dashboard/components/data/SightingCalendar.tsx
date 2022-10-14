@@ -1,22 +1,36 @@
 import { ResponsiveTimeRange } from "@nivo/calendar";
 import { FC } from "react";
 import { useSightings } from "../../lib/hooks/useSightings";
+import { DataMode } from "../../lib/types";
+import Tooltip from "../shared/Tooltip";
 
-const SightingCalendar: FC = () => {
-  const { data, isLoading } = useSightings();
+interface Props {
+  mode?: DataMode;
+}
+
+const SightingCalendar: FC<Props> = ({ mode = "realtime" }) => {
+  const { data, isLoading } = useSightings(mode);
 
   return (
     <>
-      <p className="text-xl pb-4">Malicious Sightings this Month</p>
+      <div className="flex justify-between items-center">
+        <p className="text-xl pb-4">Malicious Sightings this Month</p>
+        <Tooltip content="This is a network time graph showing the traffic over time" />
+      </div>
+
       {!isLoading && data && (
         <ResponsiveTimeRange
           // data={data.map((s) => ({ day: s.first_seen, value: 1 }))}
-          data={[
-            { day: "2022-09-03", value: 2 },
-            { day: "2022-09-14", value: 5 },
-            { day: "2022-09-21", value: 3 },
-            { day: "2022-09-23", value: 7 },
-          ]}
+          data={
+            mode === "realtime"
+              ? []
+              : [
+                  { day: "2022-09-03", value: 2 },
+                  { day: "2022-09-14", value: 5 },
+                  { day: "2022-09-21", value: 3 },
+                  { day: "2022-09-23", value: 7 },
+                ]
+          }
           from="2022-09-01"
           to="2022-09-31"
           emptyColor="#eeeeee"

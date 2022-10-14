@@ -1,11 +1,11 @@
 import useSWR from "swr";
-import { NetworkTraffic } from "../types";
+import { DataMode, NetworkTraffic } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export const useNetworkObservables = () => {
+export const useNetworkObservables = (mode: DataMode) => {
   const { data, error } = useSWR<NetworkTraffic[]>(
-    "/api/network-traffic",
+    `/api/network-traffic?mode=${mode}`,
     fetcher
   );
 

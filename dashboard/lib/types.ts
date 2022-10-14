@@ -1,3 +1,5 @@
+export type DataMode = "realtime" | "highrisk";
+
 export interface StixObject {
   type: string;
   spec_version: string;

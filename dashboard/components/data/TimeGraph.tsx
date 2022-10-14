@@ -1,12 +1,20 @@
 import { ResponsiveLine, Serie } from "@nivo/line";
 import { FC, useEffect, useState } from "react";
 import { useInfrastructure } from "../../lib/hooks/useInfrastructure";
-import { Infrastructure, NetworkTraffic } from "../../lib/types";
+import { DataMode, Infrastructure, NetworkTraffic } from "../../lib/types";
+import Tooltip from "../shared/Tooltip";
 
 const getLineData = async (infrastructure: Infrastructure): Promise<Serie> => {
   const { ip, traffic } = (await (
     await fetch(`/api/infrastructure-traffic/${infrastructure.id}`)
   ).json()) as { ip: string; traffic: NetworkTraffic[] };
+
+  if (!traffic) {
+    return {
+      id: ip,
+      data: [],
+    };
+  }
 
   const sortByTime = traffic
     .map((time) => new Date(time.start))
@@ -30,11 +38,19 @@ const getLineData = async (infrastructure: Infrastructure): Promise<Serie> => {
 const convertToLineData = async (
   infrastructure: Infrastructure[]
 ): Promise<Serie[]> => {
-  return Promise.all(infrastructure.map(async (ip) => await getLineData(ip)));
+  if (infrastructure && infrastructure.length > 0) {
+    return Promise.all(infrastructure.map(async (ip) => await getLineData(ip)));
+  }
+  return [];
 };
 
-const TimeGraph: FC = () => {
-  const { data: infrastructure, isLoading: infraLoading } = useInfrastructure();
+interface Props {
+  mode?: DataMode;
+}
+
+const TimeGraph: FC<Props> = ({ mode = "realtime" }) => {
+  const { data: infrastructure, isLoading: infraLoading } =
+    useInfrastructure(mode);
   const [lineData, setLineData] = useState<Serie[]>([]);
 
   useEffect(() => {
@@ -54,7 +70,10 @@ const TimeGraph: FC = () => {
 
   return (
     <>
-      <p className="text-center text-2xl">Network Traffic over Time</p>
+      <div className="flex justify-between items-center">
+        <p className="text-xl pb-4">Network Traffic over last day</p>
+        <Tooltip content="This is a network time graph showing the traffic over time" />
+      </div>
       <ResponsiveLine
         data={lineData}
         margin={{ top: 20, right: 110, bottom: 80, left: 60 }}

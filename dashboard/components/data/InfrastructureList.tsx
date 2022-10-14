@@ -1,17 +1,26 @@
 import { FC } from "react";
 import { InputNode, ResponsiveNetwork } from "@nivo/network";
 import { useNetworkData } from "../../lib/hooks/useNetworkData";
+import Tooltip from "../shared/Tooltip";
+import { DataMode } from "../../lib/types";
 
 const isLocal = (n: { id: string }) => n.id.startsWith("192.168");
 
 const nodeSize = (n: { id: string }) => (isLocal(n) ? 24 : 15);
 
-const InfrastructureMap: FC = () => {
-  const { data, isLoading } = useNetworkData();
+interface Props {
+  mode?: DataMode;
+}
+
+const InfrastructureMap: FC<Props> = ({ mode = "realtime" }) => {
+  const { data, isLoading } = useNetworkData(mode);
 
   return (
     <>
-      <p className="text-xl pb-4">Devices on Network</p>
+      <div className="flex justify-between items-center">
+        <p className="text-xl pb-4">Devices on Network</p>
+        <Tooltip content="This is a network time graph showing the traffic over time" />
+      </div>
       {!isLoading && data.nodes && (
         <ResponsiveNetwork
           data={data}

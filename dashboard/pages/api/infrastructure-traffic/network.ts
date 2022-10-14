@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import getClient from "../../../lib/database";
+import Database from "../../../lib/database";
 import {
+  DataMode,
   Infrastructure,
   Ipv4Address,
   NetworkTraffic,
@@ -11,9 +12,10 @@ export const getNetworkObservables = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
+  const { mode } = req.query;
   if (req.method === "GET") {
     try {
-      const db = await getClient();
+      const db = await Database.getClient(mode as DataMode);
 
       const infrastructure = await db
         .collection<Infrastructure>("infrastructure")
