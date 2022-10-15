@@ -4,14 +4,12 @@ import InfrastructureList from "../components/data/InfrastructureList";
 import SecurityStatus from "../components/data/SecurityStatus";
 import SightingCalendar from "../components/data/SightingCalendar";
 import TimeGraph from "../components/data/TimeGraph";
-import Navbar from "../components/shared/Navbar";
 import Panel from "../components/shared/Panel";
 
 const Home: NextPage = () => {
   return (
     <>
       <div>
-        <Navbar />
         <div className="flex h-screen gap-10 flex-wrap p-12">
           <Panel compact={true} light={false}>
             <SecurityStatus />

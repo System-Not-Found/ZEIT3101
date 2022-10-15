@@ -1,11 +1,11 @@
 import useSWR from "swr";
-import { StixObject } from "../types";
+import { DataMode, StixObject } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export const useRelatipnship = (object: StixObject) => {
+export const useRelatipnship = (object: StixObject, mode: DataMode) => {
   const { data, error } = useSWR<StixObject[]>(
-    `/api/relationship/${object.id}`,
+    `/api/relationship/${object.id}?mode=${mode}`,
     fetcher
   );
 

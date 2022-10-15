@@ -1,19 +1,34 @@
 import * as mongoDB from "mongodb";
-import * as dotenv from "dotenv";
+import { DataMode } from "./types";
 
 const connectionString = `mongodb://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@localhost:27017/?retryWrites=true&w=majority`;
 
-let connection: mongoDB.Db | undefined = undefined;
+class Database {
+  private static _realconnection: mongoDB.Db; // holds realtime data
+  private static _highriskconnection: mongoDB.Db; // holds highrisk data
 
-const getClient = async (): Promise<mongoDB.Db> => {
-  if (!connection) {
-    const client = new mongoDB.MongoClient(connectionString);
+  private constructor() {}
 
-    await client.connect();
+  public static async getClient(mode: DataMode): Promise<mongoDB.Db> {
+    if (!this._highriskconnection) {
+      const client = new mongoDB.MongoClient(connectionString);
 
-    connection = client.db("stix");
+      await client.connect();
+
+      this._highriskconnection = client.db("highrisk");
+    }
+    if (!this._realconnection) {
+      const client = new mongoDB.MongoClient(connectionString);
+
+      await client.connect();
+
+      this._realconnection = client.db("realtime");
+    }
+    console.log(this._highriskconnection);
+    return mode === "realtime"
+      ? this._realconnection
+      : this._highriskconnection;
   }
-  return connection;
-};
+}
 
-export default getClient;
+export default Database;

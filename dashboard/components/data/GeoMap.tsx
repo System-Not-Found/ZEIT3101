@@ -2,23 +2,37 @@ import { FC, useEffect, useState } from "react";
 import { ResponsiveChoropleth } from "@nivo/geo";
 import { useLocations } from "../../lib/hooks/useLocations";
 import countries from "../../lib/world_countries.json";
+import Tooltip from "../shared/Tooltip";
+import { DataMode } from "../../lib/types";
 
-const GeoMap: FC = () => {
-  const { data, isLoading } = useLocations();
+interface Props {
+  mode?: DataMode;
+}
+
+const GeoMap: FC<Props> = ({ mode = "realtime" }) => {
+  const { data, isLoading } = useLocations(mode);
+
+  const locationData =
+    data && data.length > 0
+      ? Object.entries(
+          data
+            .map((d) => d.country)
+            .reduce((prev, curr) => {
+              prev[curr] = prev[curr] ? prev[curr] + 1 : 1;
+              return prev;
+            }, {} as Record<string, number>)
+        ).map(([k, v]) => ({ id: k, value: v }))
+      : [];
 
   return (
     <>
-      <p className="text-xl pb-4">IP connections by Country</p>
+      <div className="flex justify-between items-center">
+        <p className="text-xl pb-4">IP Connections by Country</p>
+        <Tooltip content="This is a network time graph showing the traffic over time" />
+      </div>
       {!isLoading && data && (
         <ResponsiveChoropleth
-          data={Object.entries(
-            data
-              .map((d) => d.country)
-              .reduce((prev, curr) => {
-                prev[curr] = prev[curr] ? prev[curr] + 1 : 1;
-                return prev;
-              }, {} as Record<string, number>)
-          ).map(([k, v]) => ({ id: k, value: v }))}
+          data={locationData}
           features={countries.features}
           margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
           colors="nivo"

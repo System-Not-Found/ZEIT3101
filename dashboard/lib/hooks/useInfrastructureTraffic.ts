@@ -1,11 +1,14 @@
 import useSWR from "swr";
-import { Infrastructure } from "../types";
+import { DataMode, Infrastructure } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export const useInfrastructureTraffic = (infrastructure: Infrastructure) => {
+export const useInfrastructureTraffic = (
+  infrastructure: Infrastructure,
+  mode: DataMode
+) => {
   const { data, error } = useSWR<Infrastructure[]>(
-    `/api/infrastructure-traffic/${infrastructure.id}`,
+    `/api/infrastructure-traffic/${infrastructure.id}?mode=${mode}`,
     fetcher
   );
 
