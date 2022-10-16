@@ -12,7 +12,7 @@ const Home: NextPage = () => {
       <div>
         <p className="pl-12">
           This is for demonstration purposes only and is not an example of your
-          network's current security position.
+          network&apos;s current security position.
         </p>
         <div className="flex h-screen gap-10 flex-wrap p-12">
           <Panel compact={true} light={false}>

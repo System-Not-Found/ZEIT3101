@@ -28,7 +28,7 @@ const GeoMap: FC<Props> = ({ mode = "realtime" }) => {
     <>
       <div className="flex justify-between items-center">
         <p className="text-xl pb-4">IP Connections by Country</p>
-        <Tooltip content="This is a network time graph showing the traffic over time" />
+        <Tooltip content="This visualisation indicates the location of IP connections on the network by country." />
       </div>
       {!isLoading && data && (
         <ResponsiveChoropleth

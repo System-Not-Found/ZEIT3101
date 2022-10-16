@@ -11,7 +11,7 @@ const Glossary: NextPage = () => {
       <p className="text-2xl font-medium pb-5">Threat Library</p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {threat_library.map((t) => (
-          <div className="flex flex-col gap-2 shadow-md p-5">
+          <div key={t.title} className="flex flex-col gap-2 shadow-md p-5">
             <p className="text-lg font-medium">{t.title}</p>
             <p className="font-medium">Characteristics</p>
             <p className="text-md pl-1">{t.characteristics}</p>
@@ -33,6 +33,7 @@ const Glossary: NextPage = () => {
           .map((d) => (
             <div
               id={slugify(d.title)}
+              key={d.title}
               className="flex flex-col gap-2 shadow-md p-6 hover:bg-slate-50 hover:cursor-pointer"
             >
               <p className="text-md font-bold">{d.title}</p>

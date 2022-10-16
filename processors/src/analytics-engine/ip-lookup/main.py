@@ -122,7 +122,7 @@ class IpLookup:
 
     @staticmethod
     def is_malicious(analysis_stats: dict):
-        if analysis_stats["malicious"] > 0:
+        if analysis_stats["malicious"] > 5:
             return True
 
         if (
@@ -137,7 +137,7 @@ class IpLookup:
 
             if (
                 analysis_stats["malicious"] + analysis_stats["suspicious"]
-            ) / total > 0.02:
+            ) / total > 0.05:
                 return True
 
         return False

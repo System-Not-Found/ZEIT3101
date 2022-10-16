@@ -6,7 +6,7 @@ from stix2 import NetworkTraffic, IPv4Address, Bundle
 
 class PyShark:
     def __init__(self):
-        self.capture = pyshark.LiveCapture(interface="en0")
+        self.capture = pyshark.LiveCapture(interface="eth0")
         self.helper = Helper(hostname="localhost")
 
     def start(self):

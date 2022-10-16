@@ -1,7 +1,7 @@
 import * as mongoDB from "mongodb";
 import { DataMode } from "./types";
 
-const connectionString = `mongodb://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@localhost:27017/?retryWrites=true&w=majority`;
+const connectionString = `mongodb://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@db:27017/?retryWrites=true&w=majority`;
 
 class Database {
   private static _realconnection: mongoDB.Db; // holds realtime data

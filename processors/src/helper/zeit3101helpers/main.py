@@ -1,4 +1,5 @@
 import json
+from time import sleep
 import pika
 from stix2 import Bundle, parse
 from typing import Callable
@@ -13,10 +14,17 @@ class ChannelProvider:
         password: str = "root",
     ):
         credentials = pika.PlainCredentials(username, password)
+        self._connection = None
 
-        self._connection = pika.BlockingConnection(
-            pika.ConnectionParameters(hostname, port, "/", credentials)
-        )
+        while self._connection is None:
+            try:
+                self._connection = pika.BlockingConnection(
+                    pika.ConnectionParameters(hostname, port, "/", credentials)
+                )
+            except pika.exceptions.AMQPConnectionError:
+                print("Polling AMQP channel")
+                sleep(1000)
+
         self._stix_channel = None
         self._enrichment_channel = None
 
