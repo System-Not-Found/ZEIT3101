@@ -12,7 +12,6 @@ export const getNetworkObservables = async (
   res: NextApiResponse
 ) => {
   const { id, mode } = req.query;
-  console.log(req.query);
   if (req.method === "GET") {
     try {
       const db = await Database.getClient(mode as DataMode);

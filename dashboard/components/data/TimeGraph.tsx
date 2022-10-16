@@ -92,7 +92,8 @@ const TimeGraph: FC<Props> = ({ mode = "realtime" }) => {
               (val) =>
                 Math.max(
                   ...val.data.map((d) => Number.parseInt(`${d.y || 0}`))
-                ) + 50
+                ) +
+                val.data.length / 10
             )
           ),
           stacked: true,

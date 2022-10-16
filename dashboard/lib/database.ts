@@ -24,7 +24,6 @@ class Database {
 
       this._realconnection = client.db("realtime");
     }
-    console.log(this._highriskconnection);
     return mode === "realtime"
       ? this._realconnection
       : this._highriskconnection;

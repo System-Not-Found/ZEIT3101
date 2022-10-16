@@ -1,12 +1,15 @@
 # PyShark Processor
 import pyshark
+import os
 from zeit3101helpers import Helper
 from stix2 import NetworkTraffic, IPv4Address, Bundle
 
 
 class PyShark:
     def __init__(self):
-        self.capture = pyshark.LiveCapture(interface="eth0")
+        self.capture = pyshark.LiveCapture(
+            os.environ.get("MAIN_INTERFACE", "eth0")
+        )
         self.helper = Helper(hostname="localhost")
 
     def start(self):

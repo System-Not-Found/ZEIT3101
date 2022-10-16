@@ -27,7 +27,6 @@ const SightingCalendar: FC<Props> = ({ mode = "realtime" }) => {
         <ResponsiveTimeRange
           data={data.map((s) => {
             const val = data.filter((t) => s.created === t.created).length;
-            console.log(val);
             return {
               day: formatDate(new Date(Date.parse(s.created))),
               value: data.filter((t) => s.created === t.created).length,
