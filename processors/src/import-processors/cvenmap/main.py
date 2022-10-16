@@ -13,16 +13,22 @@ from stix2 import (
     CourseOfAction,
 )
 from zeit3101helpers import Helper
+import netifaces as ni
 
 
 class NmapProcessor:
     def __init__(self):
         self.active_hosts = []
-        hostname = socket.gethostname()
-        network_address = socket.gethostbyname(hostname)
+        network_address = NmapProcessor.get_ip_address(
+            os.environ.get("MAIN_INTERFACE", "eth0")
+        )
         self.network_address = ".".join(network_address.split(".")[:-1] + [""])
         self.__discover_hosts()
         self.helper = Helper(hostname="localhost")
+
+    @staticmethod
+    def get_ip_address(ifname: str):
+        return ni.ifaddresses(ifname)[ni.AF_INET]["addr"]
 
     def start(self):
         print("Pushing data...")

@@ -42,6 +42,8 @@ services:
   pyshark:
     build: processors/src/import-processors/pyshark
     network_mode: host
+    environment:
+      MAIN_INTERFACE: $MAIN_INTERFACE
     depends_on:
       - queue
     cap_add:
@@ -53,6 +55,7 @@ services:
     network_mode: host
     environment:
       CVE_API_KEY: $CVE_API_KEY
+      MAIN_INTERFACE: $MAIN_INTERFACE
     depends_on:
       - queue
 
