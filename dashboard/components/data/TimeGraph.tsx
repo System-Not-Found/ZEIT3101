@@ -4,9 +4,12 @@ import { useInfrastructure } from "../../lib/hooks/useInfrastructure";
 import { DataMode, Infrastructure, NetworkTraffic } from "../../lib/types";
 import Tooltip from "../shared/Tooltip";
 
-const getLineData = async (infrastructure: Infrastructure): Promise<Serie> => {
+const getLineData = async (
+  infrastructure: Infrastructure,
+  mode: DataMode
+): Promise<Serie> => {
   const { ip, traffic } = (await (
-    await fetch(`/api/infrastructure-traffic/${infrastructure.id}`)
+    await fetch(`/api/infrastructure-traffic/${infrastructure.id}?mode=${mode}`)
   ).json()) as { ip: string; traffic: NetworkTraffic[] };
 
   if (!traffic) {
@@ -36,10 +39,13 @@ const getLineData = async (infrastructure: Infrastructure): Promise<Serie> => {
 };
 
 const convertToLineData = async (
-  infrastructure: Infrastructure[]
+  infrastructure: Infrastructure[],
+  mode: DataMode
 ): Promise<Serie[]> => {
   if (infrastructure && infrastructure.length > 0) {
-    return Promise.all(infrastructure.map(async (ip) => await getLineData(ip)));
+    return Promise.all(
+      infrastructure.map(async (ip) => await getLineData(ip, mode))
+    );
   }
   return [];
 };
@@ -56,7 +62,7 @@ const TimeGraph: FC<Props> = ({ mode = "realtime" }) => {
   useEffect(() => {
     const getLineData = async () => {
       if (!infraLoading && infrastructure) {
-        const lineData = await convertToLineData(infrastructure);
+        const lineData = await convertToLineData(infrastructure, mode);
         setLineData(
           lineData
             .slice(0, [...new Set(lineData.map((v) => v.id))].length)
@@ -72,7 +78,7 @@ const TimeGraph: FC<Props> = ({ mode = "realtime" }) => {
     <>
       <div className="flex justify-between items-center">
         <p className="text-xl pb-4">Network Traffic over last day</p>
-        <Tooltip content="This is a network time graph showing the traffic over time" />
+        <Tooltip content="This visualisation indicates the volume of network traffic across a 24-hour period of time." />
       </div>
       <ResponsiveLine
         data={lineData}

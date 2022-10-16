@@ -1,2 +1,0 @@
-pyshark==0.5.3
-zeit3101helpers==0.0.11

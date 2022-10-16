@@ -2,6 +2,7 @@ import { FC } from "react";
 import { useSightings } from "../../lib/hooks/useSightings";
 import { DataMode } from "../../lib/types";
 import Spinner from "../shared/Spinner";
+import Tooltip from "../shared/Tooltip";
 
 type Status = "LOW" | "MEDIUM" | "HIGH";
 
@@ -27,7 +28,10 @@ const SecurityStatus: FC<Props> = ({ mode = "realtime" }) => {
   return (
     !isLoading && (
       <div className="flex flex-col gap-10 p-4">
-        <p className="text-5xl text-white">Security Status</p>
+        <div className="flex justify-between items-center">
+          <p className="text-5xl text-white">Security Status</p>
+          <Tooltip content="This indicates the overall status of your network. Low risk does not imply that a network is secure, but rather suggests that there are no substantial vulnerabilities that have been detected." />
+        </div>
         <div className="flex gap-2 justify-between items-center">
           <p className="text-6xl text-white">{status} RISK</p>
           <img className="h-40" src={`/img/${status.toLowerCase()}risk.png`} />

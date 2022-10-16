@@ -8,31 +8,33 @@ interface Props {
   mode?: DataMode;
 }
 
+const formatDate = (date: Date) => date.toISOString().split("T")[0];
+
 const SightingCalendar: FC<Props> = ({ mode = "realtime" }) => {
   const { data, isLoading } = useSightings(mode);
+
+  const date = new Date(Date.now());
+  const prevMonth = new Date(date.setMonth(date.getMonth() - 1));
 
   return (
     <>
       <div className="flex justify-between items-center">
         <p className="text-xl pb-4">Malicious Sightings this Month</p>
-        <Tooltip content="This is a network time graph showing the traffic over time" />
+        <Tooltip content="This visualisation shows the number of potentially malicious sightings per month." />
       </div>
 
       {!isLoading && data && (
         <ResponsiveTimeRange
-          // data={data.map((s) => ({ day: s.first_seen, value: 1 }))}
-          data={
-            mode === "realtime"
-              ? []
-              : [
-                  { day: "2022-09-03", value: 2 },
-                  { day: "2022-09-14", value: 5 },
-                  { day: "2022-09-21", value: 3 },
-                  { day: "2022-09-23", value: 7 },
-                ]
-          }
-          from="2022-09-01"
-          to="2022-09-31"
+          data={data.map((s) => {
+            const val = data.filter((t) => s.created === t.created).length;
+            console.log(val);
+            return {
+              day: formatDate(new Date(Date.parse(s.created))),
+              value: data.filter((t) => s.created === t.created).length,
+            };
+          })}
+          from={formatDate(prevMonth)}
+          to={formatDate(date)}
           emptyColor="#eeeeee"
           colors={["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"]}
           margin={{ top: 40, right: 40, bottom: 100, left: 40 }}

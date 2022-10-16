@@ -1,14 +1,14 @@
 version: "3.1"
 
 services:
-  # dashboard:
-  #   build: dashboard/
-  #   ports:
-  #     - "3000:3000"
-  #   restart: on-failure:10
-  #   networks:
-  #     - web
-  #     - database
+  dashboard:
+    build: dashboard/
+    ports:
+      - "3000:3000"
+    restart: on-failure:10
+    networks:
+      - web
+      - database
 
   db:
     image: mongo
@@ -39,21 +39,22 @@ services:
     depends_on:
       - db
 
-  # pyshark:
-  #   build: processors/src/import-processors/pyshark
-  #   networks:
-  #     - processors
-  #   depends_on:
-  #     - queue
+  pyshark:
+    build: processors/src/import-processors/pyshark
+    network_mode: host
+    depends_on:
+      - queue
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
 
-  # cve:
-  #   build: processors/src/import-processors/cve
-  #   networks:
-  #     - processors
-  #   environment:
-  #     CVE_API_KEY: $CVE_API_KEY
-  #   depends_on:
-  #     - queue
+  cvenmap:
+    build: processors/src/import-processors/cvenmap
+    network_mode: host
+    environment:
+      CVE_API_KEY: $CVE_API_KEY
+    depends_on:
+      - queue
 
   worker:
     build: processors/src/workers/default
@@ -95,3 +96,5 @@ networks:
   web: {}
   database: {}
   processors: {}
+  host-listener:
+    driver: host

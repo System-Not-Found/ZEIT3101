@@ -19,7 +19,7 @@ const InfrastructureMap: FC<Props> = ({ mode = "realtime" }) => {
     <>
       <div className="flex justify-between items-center">
         <p className="text-xl pb-4">Devices on Network</p>
-        <Tooltip content="This is a network time graph showing the traffic over time" />
+        <Tooltip content="This visualisation represents the devices and sub-networks present within a network. The connections between them are also indicated." />
       </div>
       {!isLoading && data.nodes && (
         <ResponsiveNetwork
