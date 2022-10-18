@@ -28,7 +28,7 @@ class NmapProcessor:
 
     @staticmethod
     def get_ip_address(ifname: str):
-        return ni.ifaddresses(ifname)[ni.AF_INET]["addr"]
+        return ni.ifaddresses(ifname)[ni.AF_INET][0]["addr"]
 
     def start(self):
         print("Pushing data...")
