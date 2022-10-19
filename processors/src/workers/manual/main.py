@@ -26,7 +26,7 @@ conn_str = f"mongodb://{os.getenv('DATABASE_USER')}:{os.getenv('DATABASE_PASSWOR
 class ManualWorker:
     def __init__(self):
         self.client = pymongo.MongoClient(
-            conn_str, serverSelectionTimeoutMS=5000
+            conn_str, serverSelectionTimeoutMS=60000
         )
         self.db = self.client["highrisk"]
 

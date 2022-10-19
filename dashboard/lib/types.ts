@@ -53,3 +53,15 @@ export interface Sighting extends StixObject {
 export interface Location extends StixObject {
   country: string;
 }
+
+export interface Indicator extends StixObject {
+  name?: string;
+  description?: string;
+  indicator_types?: string[];
+  pattern: string;
+  pattern_type: string;
+  pattern_version?: string;
+  valid_from: string;
+  valid_until?: string;
+  kill_chain_phases?: string[];
+}
