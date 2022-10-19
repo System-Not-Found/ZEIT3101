@@ -99,5 +99,3 @@ networks:
   web: {}
   database: {}
   processors: {}
-  host-listener:
-    driver: host

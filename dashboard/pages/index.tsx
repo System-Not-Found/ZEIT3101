@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
 import GeoMap from "../components/data/GeoMap";
-import InfrastructureList from "../components/data/InfrastructureList";
+import NetworkGraph from "../components/data/NetworkGraph";
 import SecurityStatus from "../components/data/SecurityStatus";
 import SightingCalendar from "../components/data/SightingCalendar";
+import SightingConsole from "../components/data/SightingConsole";
 import TimeGraph from "../components/data/TimeGraph";
 import Panel from "../components/shared/Panel";
 
@@ -11,21 +12,23 @@ const Home: NextPage = () => {
     <>
       <div>
         <div className="flex h-screen gap-10 flex-wrap p-12">
-          <Panel compact={true} light={false}>
+          <Panel size="sm" light={false}>
             <SecurityStatus />
           </Panel>
-
-          <Panel>
+          <Panel size="lg">
             <TimeGraph />
           </Panel>
-          <Panel compact={true}>
+          <Panel size="sm">
             <SightingCalendar />
           </Panel>
-          <Panel>
+          <Panel size="sm">
+            <SightingConsole />
+          </Panel>
+          <Panel size="md">
             <GeoMap />
           </Panel>
-          <Panel>
-            <InfrastructureList />
+          <Panel size="xl">
+            <NetworkGraph />
           </Panel>
         </div>
       </div>

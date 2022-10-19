@@ -22,8 +22,8 @@ class ChannelProvider:
                     pika.ConnectionParameters(hostname, port, "/", credentials)
                 )
             except pika.exceptions.AMQPConnectionError:
-                print("Polling AMQP channel")
-                sleep(1000)
+                print("Polling AMQP channel...")
+                sleep(3)
 
         self._stix_channel = None
         self._enrichment_channel = None

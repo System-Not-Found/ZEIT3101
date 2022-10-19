@@ -26,14 +26,17 @@ const SightingCalendar: FC<Props> = ({ mode = "realtime" }) => {
       {!isLoading && data && (
         <ResponsiveTimeRange
           data={data.map((s) => {
-            const val = data.filter((t) => s.created === t.created).length;
+            const created = s.created.split("T")[0];
+            const value = data.filter(
+              (t) => created === t.created.split("T")[0]
+            ).length;
             return {
               day: formatDate(new Date(Date.parse(s.created))),
-              value: data.filter((t) => s.created === t.created).length,
+              value,
             };
           })}
           from={formatDate(prevMonth)}
-          to={formatDate(date)}
+          to={formatDate(new Date(Date.now()))}
           emptyColor="#eeeeee"
           colors={["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"]}
           margin={{ top: 40, right: 40, bottom: 100, left: 40 }}
